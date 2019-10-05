@@ -91,8 +91,8 @@ $listinha = $questoesDAO-> buscar();
  <?php foreach($listinha as $questoes): ?>
 				<tr>
 					<td><?=  $questoes->idUsuario ?></td>
-					<td><?=  $questoes->nome ?></td>
-					<td><?=  $questoes->email ?></td>
+					<td><?=  $questoes->enunciado ?></td>
+					<td><?=  $questoes->tipo ?></td>
 					<td>
 					<td>
 						<a type="button" class="btn btn-dark" href="UsuarioController.php?acao=apagar&id=<?=  $questoes->idUsuario ?>">

@@ -1,9 +1,9 @@
 <?php 
 
 class QuestoesDAO{
-	public $nome;
+	public $idQuestao;
 	public $enunciado;
-	public $tipos;
+	public $tipo;
 
 	private $con;
 
@@ -19,7 +19,7 @@ class QuestoesDAO{
 
 	public function inserir(){
 		$con = mysqli_connect("localhost: 3307", "root", "", "projetopw");
-		$sql = "INSERT INTO usuarios VALUES (0, '$this->nome', '$this->email', '$this->senha')";
+		$sql = "INSERT INTO questoes VALUES (0, '$this->idQuestao', '$this->enunciado', '$this->tipo')";
 
 		$rs = $this->con->query($sql);
 
@@ -38,7 +38,7 @@ class QuestoesDAO{
 		while ($linha = $rs->fetch_object()){
 			$listinha[] = $linha;
 		}
-		return $listaDeUsuarios;
+		return $listinha;
 	}
 }
 
