@@ -1,56 +1,29 @@
 <?php
 require("verificarLogin.php");
 
-include "UsuarioDAO.php";
-include "alerta.php";
+include "AlternativasDAO.php";
 
-$usuarioDAO = new UsuarioDAO();
-$lista = $usuarioDAO->buscar();
+$AlternativasDAO = new AlternativasDAO();
+$lista = $AlternativasDAO->buscar();
 
 include "cabecalho.php";
 include "menu.php";
 ?>
 
-
 		<div class= "col-10">
-      
-      <?php mostrarAlerta("success"); ?>
-      <?php mostrarAlerta("danger"); ?>
 
 
-
-			<h3>Usuários</h3>
-
-			<button class="btn btn-primary"  data-toggle="modal" data-target="#modalnovo" style= "background-color:#000000   ">
-				<i class="fas fa-user-circle" style= "background-color:#000000  "></i>
-			Novo usuário
-		</button>
 			<table class="table">
 				<thead class="thead-dark">
 				<tr>
-					<th>#</th>
-					<th>Nome</th>
-					<th>E-mail</th>
-					<th>Ações</th>
+          <?php foreach($lista as $alternativas): ?>
+					<th> <?= $alternativas->idAlternativa ?></th>
+					<th> <?= $alternativas->texto ?></th>
+					<th> <?= $alternativas->idQuestao?></th>
+          <th> <?= $alternativas->correta?></th>
 				</tr>
-				<?php foreach($lista as $usuario): ?>
-				<tr>
-					<td><?=  $usuario->idUsuario ?></td>
-					<td><?=  $usuario->nome ?></td>
-					<td><?=  $usuario->email ?></td>
-					<td>
-						<a type="button" class="btn btn-dark" href="UsuarioController.php?acao=apagar&id=<?=  $usuario->idUsuario ?>">
-							<i class="fas fa-trash-alt">
-							</i></a>
-						<a type="button" class="btn btn-dark editar" href= "" data-toggle="modal" data-target="#modaleditar" data-id="<?=  $usuario->idUsuario ?>">
-							<i class="fas fa-edit"> 
-							</i>
-						</a>
-						<a type="button" class="btn btn-dark alterar-senha" href="" data-toggle="modal" data-target="#modalsenha" data-id="<?=  $usuario->idUsuario ?>">
-						<i class="fas fa-key"></i>
-					</a>
-					</td>
-				</tr>
+			
+				
 				<?php endforeach ?>
 			</table>
 		</div>
@@ -72,7 +45,8 @@ include "menu.php";
   <div class="form-group">
 
   	<label for="exampleInputEmail1">Nome</label>
-    <input type="text" name="nome" class="form-control" id="exampleInputName1" aria-describedby="NameHelp" placeholder="Insira seu nome">
+    <input type="name" name="n
+    ome" class="form-control" id="exampleInputName1" aria-describedby="NameHelp" placeholder="Insira seu nome">
 </div>
   <div class="form-group">
 
@@ -146,10 +120,10 @@ include "menu.php";
       </div>
       <div class="modal-body">
         <form action="UsuarioController.php?acao=editar" method="POST">
-    <input type="hidden" name="id_editar" id= "campo-id-editar" >
+    <input type="hidden" name="id_editar" id= "campo-id" >
   <div class="form-group">
 
-    <label for="id_nome">Nome</label>
+    <label for="exampleInputEmail1">Nome</label>
     <input type="name" name="nome" class="form-control" id="id_nome" aria-describedby="NameHelp" placeholder="Insira seu nome">
 </div>
   <div class="form-group">
@@ -183,14 +157,17 @@ include "menu.php";
 		var campo = document.querySelector("#campo-id");
 		campo.value = botao.getAttribute("data-id");
 	});
-var botao = document.querySelector(".editar");
-  botao.addEventListener("click", function(){
-    var campo = document.querySelector("#campo-id-editar");
-    campo.value = botao.getAttribute("data-id");
-  });
 
 
 </script>
 
+<script type="text/javascript">
+  var botao = document.querySelector(".editar-alternativa");
+  botao.addEventListener("click", function(){
+    var campo = document.querySelector("#campo-id");
+    campo.value = botao.getAttribute("data-id");
+  });
+
+</script>
 
 </html>

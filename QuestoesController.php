@@ -7,9 +7,9 @@ $acao = $_GET["acao"];
 switch ($acao){
 	case 'inserir':
 		$questoes = new QuestoesDAO();
-		$questoes->nome = $_POST[""];
+		$questoes->idQuestao = $_POST["idQuestoes"];
 		$questoes->enunciado = $_POST["enunciado"];
-		$questoes->tipos = $_POST["tipos"];
+		$questoes->tipo = $_POST["tipo"];
 		$questoes->inserir();
 		break;
 
@@ -19,6 +19,13 @@ switch ($acao){
 		$questoes->apagar($id);
 		break;
 
+	case 'editar':
+		$questao = new QuestoesDAO();
+		$questao->enunciado = $_POST["enunciado"];
+		$questao->tipo = $_POST["tipo"];
+		$questao->editar();
+		break;
+ 
 	default:
 
 		break;

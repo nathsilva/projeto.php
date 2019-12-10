@@ -1,9 +1,10 @@
 <?php 
 
-class QuestoesDAO{
-	public $idQuestoes;
-	public $enunciado;
-	public $tipo;
+class AlternativasDAO{
+	public $idAlternativa;
+	public $texto;
+	public $idQuestao;
+	public $correta;
 
 	private $con;
 
@@ -13,24 +14,17 @@ class QuestoesDAO{
 	public function apagar ($id){
 		$sql = "DELETE FROM questoes WHERE idQuestoes=$id";
 		$rs = $this->con->query($sql);
-		if ($rs) header("Location: /questoes");
+		if ($rs) header("Location: /alternativas");
 		else echo $this->con->error; 
 	}
-    ///////ERRO//////
-	public function editar ($id){
-		$sql = "SELECT FROM questoes WHERE idQuestoes=$id";
-		$rs = $this->con->query($sql);
-		if ($rs) header("Location: /questoes");
-		else echo $this->con->error; 
-	}
-    ////////ERRO////
+
 	public function inserir(){
 		$sql = "INSERT INTO questoes VALUES (0, '$this->enunciado', '$this->tipo')";
 
 		$rs = $this->con->query($sql);
 
 		if ($rs)
-			header("Location: /questoes");
+			header("Location: /alternativas");
 
 		else
 		 echo $this->con->error;
@@ -44,15 +38,19 @@ class QuestoesDAO{
 			$listinha[] = $linha;
 		}
 		return $listinha;
+		
+		
 	}
-	public function buscarPorId(){
-		$sql = "SELECT * FROM questoes WHERE idQuestao=$this->id";
+	public function editar(){
+		$sql = "UPDATE alternativas SET texto='$this->texto', correta='$this->correta' WHERE idAlternativa=$this->id";
 		$rs = $this->con->query($sql);
-		if ($linha = $rs->fetch_object()){
-			$this->enunciado = $linha->enunciado;
-			$this->tipo = $linha->tipo;
-		}
+		if ($rs) 
+			header("Location: \alternativas");
+		else 
+			echo $this->con->error;
 	}
+	
+
 }
 
  ?>

@@ -26,10 +26,30 @@ switch ($acao){
 		$usuario->trocarsenha($id, $senha);
 		break;
 
+	case 'editar':
+		$usuario = new UsuarioDAO();
+		$usuario->nome = $_POST["nome"];
+		$usuario->email = $_POST["email"];
+		$usuario->id= $_POST["id_editar"];
+		$usuario->editar();
+		break;
+
+	case 'logar':
+		$usuario = new UsuarioDAO();
+		$usuario->email=$_POST["email"];
+		$usuario->senha=$_POST["senha"];
+		$usuario->logar();
+		break;
+
+	case 'sair':
+		$usuario = new UsuarioDAO();
+		$usuario->sair();
+		break;
+
 
 
 	default:
-
+		echo "acao não reconhecida";
 		break;
 
 

@@ -1,4 +1,5 @@
 <?php 
+require "config.php";
 
 class UsuarioDAO{
 	public $nome;
@@ -8,30 +9,33 @@ class UsuarioDAO{
 	private $con;
 
 	function __construct(){
-		$rs = $this->con = mysqli_connect("localhost", "root", "", "projetopw");
+		$rs = $this->con = mysqli_connect(DB_SERVER, DB_USER, DB_PASS, DB_NAME);
 	}
 	public function apagar ($id){
 		$sql = "DELETE FROM usuarios WHERE idUsuario=$id";
 		$rs = $this->con->query($sql);
-		if ($rs) header("Location = usuarios.php");
-		else echo $this->con->error; 
+		session_start();
+		if ($rs){
+			$_SESSION["success"] = "usuário apagado com sucesso";
+		}	 
+		else{ 
+			$_SESSION["danger"] = "erro ao apagar usuário";
 	}
-
+	header("Location: /usuario");
+}
 	public function inserir(){
-		$con = mysqli_connect("localhost", "root", "", "projetopw");
-		$sql = "INSERT INTO usuarios VALUES (0, '$this->nome', '$this->email', '$this->senha')";
+		$sql = "INSERT INTO usuarios VALUES (0, '$this->nome', '$this->email', md5('$this->senha'))";
 
 		$rs = $this->con->query($sql);
 
 		if ($rs)
-			header("Location: usuario.php");
+			header("Location: /usuario");
 
 		else
 		 echo $this->con->error;
 
 	}
 	public function buscar(){
-		$con = mysqli_connect("localhost", "root", "", "projetopw");
 		$sql = "SELECT * FROM usuarios";
 		$rs = $this->con->query($sql);
 		$listaDeUsuarios = array();
@@ -44,7 +48,7 @@ class UsuarioDAO{
 		$sql = "UPDATE usuarios SET senha = md5($senha) WHERE idUsuario = $id";
 		$rs = $this->con->query($sql);
 		if ($rs)
-			header("Location: usuario.php");
+			header("Location: /usuario");
 
 		else
 		 echo $this->con->error;
@@ -52,6 +56,39 @@ class UsuarioDAO{
 		
 		
 	}
+	public function editar(){
+		$sql = "UPDATE usuarios SET nome = '$this->nome',  email = '$this->email' WHERE idUsuario = '$this->id'";
+		$rs = $this->con->query($sql);
+		if ($rs)
+			header("Location: /usuario");
+
+		else
+		 echo $this->con->error;
+	
+		
+		
+	}
+
+	public function logar(){
+		$sql = "SELECT * FROM usuarios WHERE email='$this->email' AND senha=md5('$this->senha')";
+		$rs = $this->con->query($sql);
+		if ($rs->num_rows>0){
+			session_start();
+			$_SESSION["logado"]=true;
+			header("Location: /usuario");
+		}
+			
+		else
+			header("Location: /");
+	
+	}
+
+	public function sair(){
+		session_start();
+		session_destroy();
+		header("Location: /");
+	}
 }
+
 
  ?>
