@@ -1,23 +1,32 @@
 <?php 
 
-include "AlternativaDAO.php";
+include "AlternativasDAO.php";
 
 $acao = $_GET["acao"];
 
-switch ($acao){
+switch ($acao) {
 	case 'inserir':
-		$alternativas = new AlternativasDAO();
-		$alternativas->idAlternativa = $_POST["idAlternativa"];
-		$alternativas->texto = $_POST["texto"];
-		$alternativas->idQuestao = $_POST["idQuestao"];
-		$alternativas->correta = $_POST["correta"];
-		$alternativas->inserir();
+		$alternativa = new AlternativasDAO();
+		$alternativa->texto = $_POST["texto"];
+		$alternativa->idQuestao = $_POST["idQuestao"];
+		$alternativa->imagem = "NULL";
+		if (isset($_POST["correta"])) $alternativa->correta = 1;
+		else $alternativa->correta = 0;
+		if(isset($_FILES['imagem'])){
+		    $ext = strtolower(substr($_FILES['imagem']['name'],-4)); //Pegando extensão do arquivo
+		    $new_name = date("Y.m.d-H.i.s") . $ext; //Definindo um novo nome para o arquivo
+		    $dir = './imagens/'; //Diretório para uploads 
+		    move_uploaded_file($_FILES['imagem']['tmp_name'], $dir.$new_name); //Fazer upload do arquivo
+			$alternativa->imagem = $dir.$new_name;
+		} 
+		$alternativa->inserir();
 		break;
 
 	case 'apagar':
-		$questoes = new AlternativasDAO();
+		$alternativa = new AlternativasDAO();
 		$id = $_GET["id"];
-		$questoes->apagar($id);
+		$idQuestao = $_GET["idQuestao"];
+		$alternativa->apagar($id, $idQuestao);
 		break;
 
 	case 'editar':
@@ -29,13 +38,11 @@ switch ($acao){
 		break;
 
 	default:
-
+		echo "acao não reconhecida";
 		break;
-
-
 }
 
 
 
 
- ?>
+?>

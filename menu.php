@@ -1,6 +1,4 @@
 <?php $recurso = $_SERVER["PATH_INFO"] ?>
-
-
 <div class="container-fluid" >
 	<div class="row">
 		<div class = "col-2">

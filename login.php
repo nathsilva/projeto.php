@@ -16,7 +16,7 @@
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 
 	<!--Custom styles-->
-	<link rel="stylesheet" type="text/css" href="login.css">
+	<link rel="stylesheet" type="text/css" href="css/login.css">
 </head>
 <body>
 <div class="container">
@@ -26,7 +26,7 @@
 				<h3>Entrar</h3>
 			</div>
 			<div class="card-body">
-				<form action="UsuarioController.php?acao=logar" method="POST">
+				<form action="UsuariosController.php?acao=logar" method="POST">
 					<div class="input-group form-group">
 						<div class="input-group-prepend">
 							<span class="input-group-text"><i class="fas fa-user"></i></span>

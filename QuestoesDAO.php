@@ -1,43 +1,46 @@
 <?php 
 
 class QuestoesDAO{
-	public $idQuestoes;
+	public $id;
 	public $enunciado;
 	public $tipo;
+	public $idtipo;
 
 	private $con;
 
 	function __construct(){
-		$rs = $this->con = mysqli_connect("localhost:3306", "root", "etecia", "projetopw");
+		$this->con = mysqli_connect("localhost", "root", "", "projetopw");
 	}
-	public function apagar ($id){
-		$sql = "DELETE FROM questoes WHERE idQuestoes=$id";
+
+	public function apagar($id){
+		$sql = "DELETE FROM questoes WHERE idQuestao=$id";
 		$rs = $this->con->query($sql);
-		if ($rs) header("Location: /questoes");
-		else echo $this->con->error; 
+		if ($rs) header("Location: \questoes");
+		else echo $this->con->error;
 	}
-    ///////ERRO//////
-	public function editar ($id){
-		$sql = "SELECT FROM questoes WHERE idQuestoes=$id";
-		$rs = $this->con->query($sql);
-		if ($rs) header("Location: /questoes");
-		else echo $this->con->error; 
-	}
-    ////////ERRO////
+
 	public function inserir(){
 		$sql = "INSERT INTO questoes VALUES (0, '$this->enunciado', '$this->tipo')";
-
 		$rs = $this->con->query($sql);
 
-		if ($rs)
-			header("Location: /questoes");
-
-		else
-		 echo $this->con->error;
-
+		if ($rs) 
+			header("Location: \questoes");
+		else 
+			echo $this->con->error;
 	}
+
+	public function editar(){
+		$sql = "UPDATE questoes SET enunciado='$this->enunciado', idtipo='$this->tipo' WHERE idQuestao=$this->id";
+		$rs = $this->con->query($sql);
+		if ($rs) 
+			header("Location: \questoes");
+		else 
+			echo $this->con->error;
+	}
+
+
 	public function buscar(){
-		$sql = "SELECT * FROM `questoes` WHERE 1";
+		$sql = "SELECT questoes.*, tipo_questao.tipo FROM questoes INNER JOIN tipo_questao ON tipo_questao.idTipoQuestao=questoes.idtipo";
 		$rs = $this->con->query($sql);
 		$listinha = array();
 		while ($linha = $rs->fetch_object()){
@@ -45,14 +48,18 @@ class QuestoesDAO{
 		}
 		return $listinha;
 	}
+
 	public function buscarPorId(){
-		$sql = "SELECT * FROM questoes WHERE idQuestao=$this->id";
+		$sql = "SELECT questoes.*, tipo_questao.tipo FROM questoes INNER JOIN tipo_questao ON tipo_questao.idTipoQuestao=questoes.idtipo WHERE idQuestao=$this->id";
 		$rs = $this->con->query($sql);
 		if ($linha = $rs->fetch_object()){
 			$this->enunciado = $linha->enunciado;
+			$this->idtipo = $linha->idtipo;
 			$this->tipo = $linha->tipo;
 		}
+
 	}
 }
 
- ?>
+
+?>

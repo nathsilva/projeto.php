@@ -1,56 +1,55 @@
 <?php 
 
 class AlternativasDAO{
-	public $idAlternativa;
+	public $id;
 	public $texto;
 	public $idQuestao;
 	public $correta;
+	public $imagem;
 
 	private $con;
 
 	function __construct(){
-		$rs = $this->con = mysqli_connect("localhost:3306", "root", "etecia", "projetopw");
+		$this->con = mysqli_connect("localhost", "root", "", "projetopw");
 	}
-	public function apagar ($id){
-		$sql = "DELETE FROM questoes WHERE idQuestoes=$id";
+
+	public function apagar($id, $idQuestao){
+		$sql = "DELETE FROM alternativas WHERE idAlternativa=$id";
 		$rs = $this->con->query($sql);
-		if ($rs) header("Location: /alternativas");
-		else echo $this->con->error; 
+		if ($rs) header("Location: \alternativas?questao=$idQuestao");
+		else echo $this->con->error;
 	}
 
 	public function inserir(){
-		$sql = "INSERT INTO questoes VALUES (0, '$this->enunciado', '$this->tipo')";
-
+		$sql = "INSERT INTO alternativas (idAlternativa, idQuestao, texto, correta, imagem) VALUES (0, $this->idQuestao, '$this->texto', '$this->correta', '$this->imagem')";
 		$rs = $this->con->query($sql);
 
-		if ($rs)
-			header("Location: /alternativas");
-
-		else
-		 echo $this->con->error;
-
+		if ($rs) 
+			header("Location: \alternativas?questao=$this->idQuestao");
+		else 
+			echo $this->con->error;
 	}
-	public function buscar(){
-		$sql = "SELECT * FROM `questoes` WHERE 1";
-		$rs = $this->con->query($sql);
-		$listinha = array();
-		while ($linha = $rs->fetch_object()){
-			$listinha[] = $linha;
-		}
-		return $listinha;
-		
-		
-	}
+
 	public function editar(){
 		$sql = "UPDATE alternativas SET texto='$this->texto', correta='$this->correta' WHERE idAlternativa=$this->id";
 		$rs = $this->con->query($sql);
 		if ($rs) 
-			header("Location: \alternativas");
+			header("Location: \alternativas?questao=$id");
 		else 
 			echo $this->con->error;
 	}
-	
 
+
+	public function buscar(){
+		$sql = "SELECT * FROM alternativas WHERE idQuestao=$this->idQuestao";
+		$rs = $this->con->query($sql);
+		$lista = array();
+		while ($linha = $rs->fetch_object()){
+			$lista[] = $linha;
+		}
+		return $lista;
+	}
 }
 
- ?>
+
+?>

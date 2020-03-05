@@ -1,14 +1,7 @@
 <?php 
 function mostrarAlerta($tipo){
-
 	if (isset($_SESSION[$tipo])){
-
-		echo "<div class='alert alert-$tipo'>";
-		echo $_SESSION[$tipo];
-		echo "</div>";
-
+		echo "<div class='alert alert-$tipo'>$_SESSION[$tipo]</div>";
 		unset($_SESSION[$tipo]);
 	}
 }
-
-?>

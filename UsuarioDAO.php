@@ -1,7 +1,8 @@
 <?php 
-require "config.php";
+include "config.php";
 
 class UsuarioDAO{
+	public $id;
 	public $nome;
 	public $email;
 	public $senha;
@@ -9,32 +10,54 @@ class UsuarioDAO{
 	private $con;
 
 	function __construct(){
-		$rs = $this->con = mysqli_connect(DB_SERVER, DB_USER, DB_PASS, DB_NAME);
+		$this->con = mysqli_connect(DB_SERVER, DB_USER, DB_PASS, DB_NAME);
 	}
-	public function apagar ($id){
+
+	public function apagar($id){
 		$sql = "DELETE FROM usuarios WHERE idUsuario=$id";
 		$rs = $this->con->query($sql);
-		session_start();
-		if ($rs){
-			$_SESSION["success"] = "usuário apagado com sucesso";
-		}	 
-		else{ 
-			$_SESSION["danger"] = "erro ao apagar usuário";
-	}
-	header("Location: /usuario");
-}
-	public function inserir(){
-		$sql = "INSERT INTO usuarios VALUES (0, '$this->nome', '$this->email', md5('$this->senha'))";
+		if ($rs) {
+			session_start();
+			$_SESSION["success"] = "Usuário excluído com sucesso";
+			header("Location: /usuario");
+		}
+		else {
+			session_start();
+			$_SESSION["danger"] = "Erro ao apagar usuário.";
+			header("Location: /usuario");
+		}
 
+	}
+
+	public function inserir(){
+		$sql = "INSERT INTO usuarios VALUES (0, '$this->nome', '$this->email', md5('$this->senha') )";
 		$rs = $this->con->query($sql);
 
-		if ($rs)
+		if ($rs){
+			session_start();
+			$_SESSION["success"] = "Usuário cadastrado com sucesso";
 			header("Location: /usuario");
-
-		else
-		 echo $this->con->error;
-
+		} 
+		else 
+			echo $this->con->error;
 	}
+
+	public function editar(){
+		$sql = "UPDATE usuarios SET nome='$this->nome', email='$this->email' WHERE idUsuario=$this->id";
+		$rs = $this->con->query($sql);
+		if ($rs) 
+			header("Location: /usuario");
+		else 
+			echo $this->con->error;
+	}
+
+	public function trocarSenha($id, $senha){
+		$sql = "UPDATE usuarios SET senha=md5('$senha') WHERE idUsuario=$id";
+		$rs = $this->con->query($sql);
+		if ($rs) header("Location: /usuario");
+		else echo $this->con->error;
+	}
+
 	public function buscar(){
 		$sql = "SELECT * FROM usuarios";
 		$rs = $this->con->query($sql);
@@ -44,46 +67,21 @@ class UsuarioDAO{
 		}
 		return $listaDeUsuarios;
 	}
-	public function trocarsenha($id,$senha){
-		$sql = "UPDATE usuarios SET senha = md5($senha) WHERE idUsuario = $id";
-		$rs = $this->con->query($sql);
-		if ($rs)
-			header("Location: /usuario");
-
-		else
-		 echo $this->con->error;
-	
-		
-		
-	}
-	public function editar(){
-		$sql = "UPDATE usuarios SET nome = '$this->nome',  email = '$this->email' WHERE idUsuario = '$this->id'";
-		$rs = $this->con->query($sql);
-		if ($rs)
-			header("Location: /usuario");
-
-		else
-		 echo $this->con->error;
-	
-		
-		
-	}
 
 	public function logar(){
 		$sql = "SELECT * FROM usuarios WHERE email='$this->email' AND senha=md5('$this->senha')";
 		$rs = $this->con->query($sql);
-		if ($rs->num_rows>0){
+		//echo $sql;
+		if ($rs->num_rows > 0) {
 			session_start();
 			$_SESSION["logado"]=true;
 			header("Location: /usuario");
+		}else{
+			header("Location: /?erro=1");
 		}
-			
-		else
-			header("Location: /");
-	
 	}
 
-	public function sair(){
+	public function logout(){
 		session_start();
 		session_destroy();
 		header("Location: /");
@@ -91,4 +89,4 @@ class UsuarioDAO{
 }
 
 
- ?>
+?>
